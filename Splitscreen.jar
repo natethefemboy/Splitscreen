@@ -1,0 +1,48 @@
+package de.yourname.splitscreen;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+
+public class SplitScreenBypass extends JavaPlugin implements Listener {
+
+    private final HashMap<String, Integer> ipPlayerCount = new HashMap<>();
+
+    @Override
+    public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(this, this);
+        getLogger().info("Splitscreen Bypass Plugin aktiviert!");
+    }
+
+    @EventHandler
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        String ip = event.getAddress().getHostAddress();
+        String originalName = event.getPlayer().getName();
+
+        // Zähle, wie viele Spieler bereits mit dieser IP verbunden sind
+        int count = (int) Bukkit.getOnlinePlayers().stream()
+                .filter(p -> p.getAddress().getHostString().equals(ip))
+                .count();
+
+        if (count > 0) {
+            // Zweiter/dritter/vierter Spieler
+            int newIndex = count + 1;
+            String newName = originalName + "_" + newIndex;
+
+            // Da man Namen nicht direkt ändern kann, wird DisplayName + TabName angepasst
+            Bukkit.getScheduler().runTask(this, () -> {
+                Player player = Bukkit.getPlayer(event.getPlayer().getUniqueId());
+                if (player != null) {
+                    player.setDisplayName(newName);
+                    player.setPlayerListName(newName);
+                    player.sendMessage("§aDu wurdest automatisch als §e" + newName + " §aeingeloggt (Splitscreen).");
+                }
+            });
+        }
+    }
+}

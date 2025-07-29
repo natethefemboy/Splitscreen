@@ -1,0 +1,8 @@
+name: SplitscreenSupport
+main: de.splitscreen.SplitscreenSupport
+version: 1.0
+api-version: 1.19
+author: DeinName
+description: Erlaubt Splitscreen-Spieler von Konsolen und Java ohne Kick.
+commands: {}
+permissions: {}

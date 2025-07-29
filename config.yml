@@ -1,0 +1,6 @@
+splitscreen:
+  enabled: true
+  max_per_console: 4
+  allow_custom_names: true
+  java_splitscreen: true
+  log_debug: false
